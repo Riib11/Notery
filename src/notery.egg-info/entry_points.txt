@@ -1,0 +1,3 @@
+[console_scripts]
+notery = notery.__main__:main
+

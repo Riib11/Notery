@@ -1,3 +1,0 @@
-[console_scripts]
-notery3 = notery3.__main__:main
-

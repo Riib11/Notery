@@ -1,0 +1,7 @@
+notery/__init__.py
+notery/__main__.py
+notery.egg-info/PKG-INFO
+notery.egg-info/SOURCES.txt
+notery.egg-info/dependency_links.txt
+notery.egg-info/entry_points.txt
+notery.egg-info/top_level.txt
