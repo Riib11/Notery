@@ -20,28 +20,35 @@ def main():
         
     # parse arguments
     args = argparser.parse_args()
-    # print("args:",args)
+    log( "log" , args )
+
+    def check_input():
+        if not args.input:
+            log( "error" , "please provide an input .nty file" )
+            quit()
 
     #
     # compile to html
     #
     if "html" == args.mode:
 
-        if not args.input: log( "error" , "please provide an input .nty file" )
+        check_input()
 
     #
     # compile to pdf
     #
     elif "pdf" == args.mode:
 
-        if not args.input: log( "error" , "please provide an .nty notery file" )
+        check_input()
 
     #
     # update from github
     #
     elif "update" == args.mode:
 
-        subprocess.run([".","/git/Notery/install.sh"])
+        # TODO
+        log( "msg" , "to update Notery, please run `sh .../Notery/update.sh`" )
+        # subprocess.call(["sh","~/git/Notery/install.sh"])
 
     #
     # get info

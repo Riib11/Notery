@@ -12,6 +12,7 @@ def space( n=1 ):
         printc(" ", back=PrintStyle.BACK_black, end=""))
 
 def shadow_h( n=1 ):
+    # repeat(n, lambda: printc("═", spec=2, back=PrintStyle.BACK_black, end=""))
     repeat(n, lambda: printc("═", spec=2, back=PrintStyle.BACK_black, end=""))
 
 def shadow_v( n=1 ):

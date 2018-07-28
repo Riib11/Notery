@@ -13,6 +13,6 @@ A replacement for LaTex that is significantly easier to use and more modular. No
 
 ## Compiling to HTML
 
-    notery 
+    notery html 
 
 ## Compiling to PDF
