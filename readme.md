@@ -3,16 +3,20 @@
 A replacement for LaTex that is significantly easier to use and more modular. Note that this software is build to work pretty much only on MacOS and most Linux distros, but with some tweaks it could be fixed to work on other systems.
 
 ## Installation
-
-    git clone https://github.com/Riib11/Notery.git ~/git/Notery     # downloads this repository
-    . ~/git/Notery/install.sh                                       # install commands, install python
+    
+    # downloads this repository
+    git clone https://github.com/Riib11/Notery.git ~/git/Notery 
+    # installs bash commands, installs python3 module
+    sh ~/git/Notery/install.sh
 
 ## Updating
 
-    . ~/git/Notery/update.sh
+    sh ~/git/Notery/update.sh
 
 ## Compiling to HTML
 
-    notery html 
+    notery html <input>.nty
 
 ## Compiling to PDF
+
+    notery pdf <input>.nty
