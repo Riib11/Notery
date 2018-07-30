@@ -4,9 +4,9 @@
 \\
 
 \.* automatically exports all module definitions \\
-\.module.new Article
+\.module Article
 
-    | \.module.new make
+    | \.module make
 
         | \.function header
             | title | author | date
@@ -15,11 +15,13 @@
               \.draw date   \\
         \\
 
+        | \.function body
+            | content
+            | \.draw content
+        \\
+
         | \.function footer
             | \.draw \.footerline
         \\
-
-    | \.module.new begin
-        \.* TODO \\
     \\
 \\

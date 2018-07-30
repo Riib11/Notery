@@ -2,13 +2,13 @@
 
 \.import Module \\
 
-\Module.submodule.function 
+\Module.submodule.function
 | parameter 1
 | parameter 2
 | parameter 3
 \\
 
-\Module.submodule.begin Section
+\Module.submodule.begin.section
 | A Section
 | This is a section of text isn't it great! Actually, this is the body of that section of text.
 \\
@@ -16,4 +16,13 @@
 \.let | x | ~\.B \\
 \.set | x | \.B True\\ \\
 
-~\hello
+\function my_log
+    | message
+    | \.log [!]: \message
+\\
+
+\function test_log
+    | \my_log Hello, is anyone there?
+\\
+
+\loop \.N 2 | ~\.test_log \\

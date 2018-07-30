@@ -1055,152 +1055,36 @@ body .markdown-body
 .codehilite .vi{color:teal}
 .codehilite .il{color:#009999}
 .codehilite .gc{color:#999;background-color:#EAF2F5}
-</style><title>index</title></head><body><article class="markdown-body"><h1 id="notery-the-guide">Notery - The Guide<a class="headerlink" href="#notery-the-guide" title="Permanent link"></a></h1>
-<h2 id="goals">Goals<a class="headerlink" href="#goals" title="Permanent link"></a></h2>
-<p>Notery&rsquo;s goals are to implement the following into a LaTex-like program:</p>
+</style><title>glossary</title></head><body><article class="markdown-body"><h1 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link"></a></h1>
+<p>Documentation for all built-in command words in Notery</p>
+<!-------------------------------------------------------------->
+
+<h2 id="notation">Notation<a class="headerlink" href="#notation" title="Permanent link"></a></h2>
 <ul>
-<li><strong>Modularity</strong> of packages, Linux-philosophy style; each package can easily do something small that interacts with everything else modularly and in a straighforward manner (less conflicting package issues like in LaTex!).</li>
-<li><strong>Customizability</strong> of each and every thing about a document&rsquo;s resulting appearance, without having to mess with endless built-in and undecypherable parameters.</li>
-<li><strong>Scripting</strong> at any scale of complexity; easy to write in quickly and easy to seperate into a package of its own.</li>
-<li><strong>Copypasterino-Friendly</strong> via not having endless reserved characters! Don&rsquo;t you just have the arbitraryness of the reserved characters in LaTex? I mean, sometimes being able to type a <code>^</code> rather than perhaps a <code>\^</code> can feel like a neat feature, but overall its really just restrictive especially when it comes to the others like <code>[], {}, &amp;, %, etc.</code> Notery has just one reserved character, the familiar <code>\</code>.</li>
+<li>Command Word: A special word that must be prefixed by <code>\</code> in order to be referenced.</li>
+<li>Constant: An immutable value that is set once - when it is bound.</li>
+<li>Function: A function is set once, but must be evaluated (with the approprate arguments) as an individual instance for each reference, sensative to the execution order in context.</li>
+<li><code>$</code>: prefix for function argument names.</li>
 </ul>
-<h2 id="syntax-basics">Syntax Basics<a class="headerlink" href="#syntax-basics" title="Permanent link"></a></h2>
-<p>There are two types of strings you can write in a notery file:</p>
-<ul>
-<li>Command strings: start with a <code>\</code>.</li>
-<li>Normal strings: start with anything else.</li>
-</ul>
-<p>The totality of reserved normal-contex characters are: <code>\</code>, <code>|</code>, and <code>~</code>. So you don&rsquo;t have to worry about a bunch of reserved characters! <code>\</code> prefixes command words, <code>|</code> seperates command invocation arguments, and <code>~</code> creates command word references</p>
-<p>In the command word context (the name of the command word), the only reserved characters are: <code>.</code>,<code>*</code>, and, of course, <code></code>. The <code>.</code> character allows access to the children of modules, <code>*</code> creates comments. Note, however, that all built-in command word start with <code>\\</code>, so try not to start yours with that prefix!</p>
-<p>Remember that <code>\n</code>s and <code></code>s are ignored by the lexer in terms of text placement, so you&rsquo;ll need to use certain commands to get special seperations if you want them.</p>
-<h2 id="compilation">Compilation<a class="headerlink" href="#compilation" title="Permanent link"></a></h2>
-<p>Compiling a notery document consists of the following steps:</p>
-<ol>
-<li>Read in strings in input file.</li>
-<li>Compile all command definitions, lazily.</li>
-<li>Construct document specifications using axiomatic commands (such as document size and orientation and etc). </li>
-<li>Use beta-reduction rules on command invocations to simplify the document contents to notery structures.</li>
-<li>Produce target output type from notery structured document.</li>
-</ol>
-<p>In short, the compiler defines all the command words, and then repeatedly uses beta-reduction until there are no command words left to simplify.</p>
-<h2 id="defining-a-document">Defining a Document<a class="headerlink" href="#defining-a-document" title="Permanent link"></a></h2>
-<h2 id="types">Types<a class="headerlink" href="#types" title="Permanent link"></a></h2>
-<p>There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands <code>\.S</code>, <code>\.B</code>, <code>\.I</code>, <code>\.N</code>, <code>\.F</code> for string boolean, integer, natural and float respectively, argumented with the string representation of that value. The type for a reference to a command word is <code>~\.~</code>. Invoking this command word works a little differently than the other types; basically, <code>\.~ x \\</code> results in <code>\x</code>.</p>
-<h2 id="invoking-commands">Invoking Commands<a class="headerlink" href="#invoking-commands" title="Permanent link"></a></h2>
-<p>A very simple command invocation looks like <code>\.let | $name | $value \\</code>. This command allows you to set the value of a constant. The syntax of commands, put simply, is this:</p>
-<ul>
-<li>Command name starts with <code>\</code></li>
-<li>Command arguments are each prefixed by a <code>|</code></li>
-<li>Command invocations are ended by ended by a <code>\\</code></li>
-</ul>
-<p>So, if you want to use a command <code>\f</code> that has 2 arguments, do</p>
-<div class="codehilite"><pre>\f | $1 | $2 \\
-</pre></div>
+<!-------------------------------------------------------------->
 
+<h2 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link"></a></h2>
+<!-------------------------------------------------------------->
 
-<p>If you want to use a command inside of a command, do</p>
-<div class="codehilite"><pre>\f | \f $1 | $2 \\ | \f $3 | $4 \\ \\
-</pre></div>
+<h2 id="functions">Functions<a class="headerlink" href="#functions" title="Permanent link"></a></h2>
+<h3 id="basic-functions">Basic Functions<a class="headerlink" href="#basic-functions" title="Permanent link"></a></h3>
+<h5 id="let-name-type">let $name $type<a class="headerlink" href="#let-name-type" title="Permanent link"></a></h5>
+<p>Define a new constant <code>$name</code>. Tag <code>$name</code> to indicate to the compiler that <code>$name</code> must be later <code>set</code> to have a value with the type <code>$type</code>.</p>
+<h5 id="set-name-value">set $name $value<a class="headerlink" href="#set-name-value" title="Permanent link"></a></h5>
+<p>If <code>$name</code> is undefined, then define a new constant <code>$name</code>. Bind <code>$name</code> to <code>$value</code>.</p>
+<h5 id="function-name-arg_1-arg_n-result">function $name $arg_1 &hellip; $arg_n $result<a class="headerlink" href="#function-name-arg_1-arg_n-result" title="Permanent link"></a></h5>
+<p>Define a new function <code>$name</code> that takes the arguments <code>$arg_1</code>, &hellip;,<code>$arg_n</code>. When invoked, <code>$name</code> reduces to <code>$result</code> which can refer to the arguments as temporarily defined constants.</p>
+<h5 id="module-name-child_1-child_n">module $name $child_1 &hellip; $child_n<a class="headerlink" href="#module-name-child_1-child_n" title="Permanent link"></a></h5>
+<p>Define a new module <code>$name</code> with the children <code>$child_1</code>, &hellip;, <code>$child_n</code></p>
+<!-------------------------------------------------------------->
 
-
-<p>which may look hard to read at first, but looks better with some indentations:</p>
-<div class="codehilite"><pre>\f
-    | \f $1 | $2 \\
-    | \f $3 | $4 \\
-\\
-</pre></div>
-
-
-<p>super clean! As a side not, syntax highlighting helps a lot.</p>
-<h2 id="defining-new-commands">Defining new Commands<a class="headerlink" href="#defining-new-commands" title="Permanent link"></a></h2>
-<p>To define new command words, you have a few options:</p>
-<h5 id="92set">\.set<a class="headerlink" href="#92set" title="Permanent link"></a></h5>
-<div class="codehilite"><pre>\.set $name | $value \\
-</pre></div>
-
-
-<p>Assigns <code>$value</code> to the value of a constant with the name <code>$name</code>. These constants are immutable. If a constant of the name <code>$name</code> isn&rsquo;t already defined (by the way of <code>\.let</code>), then this command defines it.</p>
-<h5 id="92let">\.let<a class="headerlink" href="#92let" title="Permanent link"></a></h5>
-<div class="codehilite"><pre>\.let $type \\
-</pre></div>
-
-
-<p>Defines a new constant, and indicates that the constant must later be <code>\set</code> to a value with the type <code>$type</code>.</p>
-<h5 id="92function">\.function<a class="headerlink" href="#92function" title="Permanent link"></a></h5>
-<div class="codehilite"><pre>\.function $name | $1_name | $2_name | ... | $result \\
-</pre></div>
-
-
-<p>Defines a new function with the name <code>$name</code> that takes arguments <code>$1_name</code>, <code>$2_name</code>, etc. These argument names serve for being referenced in <code>$result</code>. When the function is invoked, it is reduced to <code>$result</code>, which may include references to the arguments to the function. References to these names look just like references to any other defined command word. The <code>\.function</code> arguments are intrepretted with these rules: the first argument is the name of the function, the last argument is the result of the function, any arguments non-inclusevly between the first and last are argument names.</p>
-<p>Note: Recursive function definitions are <strong>NOT</strong> supported, sorry. Maybe that will be added to the language at some point.</p>
-<h2 id="function-arguments">Function Arguments<a class="headerlink" href="#function-arguments" title="Permanent link"></a></h2>
-<p>So as you&rsquo;ve noticed there are very simple types, only 5, in Notery. You&rsquo;ll mostly be working with strings, but its useful to have the others as well. Sometimes, you might want a functions arguments to have the right types. Conveniently, Notery organizes strings into arrays automatically, so even though a function argument cannot have any spaces in its name, if you do put a type next to it the compiler can easily pick it up. What does this look like? Like this, for example:</p>
-<div class="codehilite"><pre>\function my_add
-    | ~\.I x
-    | ~\.I y
-    | \.+ \x \y \\
-\\
-</pre></div>
-
-
-<p>This looks like a hastle doesn&rsquo;t it? Well, there are a few useful tricks you can use to simplify things. For example, multiple strings in a command argument slot will be interpretted each as a new argument name. The seperators enclose type requirements. So, the above could be rewritten like so:</p>
-<div class="codehilite"><pre>\function my_add
-    | ~\.I x y
-    | \.+ \x \y
-\\
-</pre></div>
-
-
-<p>Of course, this example is supremely useless because as it shows, the built-in function <code>\.+</code> already does the same thing (actually, not quite, sine it can take any number of arguments of types natural, integer, or float and sums them, the heirarchy of resulting values being the same as the order I listed them). Perhaps we can make a greeter like all the other language examples do:</p>
-<div class="codehilite"><pre>\function greet
-    | ~\.S name
-    | Hello there, \name . How are you?
-\\
-</pre></div>
-
-
-<p>Note that I had to seperate the <code>.</code> from the end of <code>\name</code>. Maybe I&rsquo;ll fix that at some point in the future.</p>
-<h2 id="referencing-commands">Referencing Commands<a class="headerlink" href="#referencing-commands" title="Permanent link"></a></h2>
-<p>Sometimes you want to reference a command itself rather than invoke it. For example, if you want to <code>\.let</code> x be an integer. The command for representing an integer value is <code>\.I</code>, but if you did <code>\.let x | \.I \\</code> the compiler will be confused because it thinks you are invoking <code>\.I</code> in the second argument of <code>\.let</code>, but there are no subsequent arguments passed to <code>\.I</code>, so you&rsquo;ll get an error pointing that out. What you really want to do is <em>reference</em> <code>\.I</code> rather than invoke it. Commonly this is termed as using a <strong>pointer</strong> that referenced where <code>\.I</code> is stored.</p>
-<p>Fortunately Notery doesn&rsquo;t complicate it to the level of pointers, but uses this notation to create a reference: <code>~\.I</code>. You can only create references to command words. For the running example with <code>\.let</code>ing x be an integer, the solution is:</p>
-<div class="codehilite"><pre>\.let x | ~\.I \\
-</pre></div>
-
-
-<p>Another common use of references you&rsquo;ll come across is repetitions or loops. The built-in command for repeating a command a given number of times is <code>\.loop</code>. Which is defined something like this (given some internal structure that can&rsquo;t be described in Notery&rsquo;s semantics):</p>
-<div class="codehilite"><pre>\function loop
-    | ~\.N times
-    | ~\.~ command
-    | \command \command ... \command
-      \* repeats &#39;\times&#39; times \\
-\\
-</pre></div>
-
-
-<p>It takes a natural and a command word reference (to just repeat a string, use <code>\.repeat</code>). Then is invokes the command word that many times, as observable above. Using this functions looks like this:</p>
-<div class="codehilite"><pre>\set message | This is an annoying message! \\
-\loop \.N 10000 | ~\message \\
-</pre></div>
-
-
-<p>Of coures, we could have just done this instead,</p>
-<div class="codehilite"><pre>\repeat \.N 10000 | \message \\
-</pre></div>
-
-
-<p>so this isn&rsquo;t the most interesting example. Here&rsquo;s a better one:</p>
-<div class="codehilite"><pre>\function my_log
-    | message
-    | \.log [!]: \message
-\\
-
-\function test_log
-    | \my_log Hello, is anyone there?
-\\
-
-\loop \.N 2 | ~\.test_log \\
-</pre></div>
-
-
-<p>You may think that currying would be a useful tactic here, and you would be correct, but unfortunately that hasn&rsquo;t been planned for implementation yet.</p>
-<p>Note: in <code>\my_log</code>&lsquo;s definition, <code>message</code> doesn&rsquo;t have a type annotation, so it is assumed to be a string (<code>\.S</code>).</p></article></body></html>
+<h3 id="utility-functions">Utility Functions<a class="headerlink" href="#utility-functions" title="Permanent link"></a></h3>
+<h5 id="repeat-times-content">repeat $times $content<a class="headerlink" href="#repeat-times-content" title="Permanent link"></a></h5>
+<p>Reduces to <code>$body</code> repeated <code>$times</code> times.</p>
+<h5 id="loop-times-command">loop $times $command<a class="headerlink" href="#loop-times-command" title="Permanent link"></a></h5>
+<p>Reduces to <code>times</code> number of invocations of <code>$command</code>.</p></article></body></html>

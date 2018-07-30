@@ -32,11 +32,13 @@ Compiling a notery document consists of the following steps:
 4. Use beta-reduction rules on command invocations to simplify the document contents to notery structures.
 5. Produce target output type from notery structured document.
 
+In short, the compiler defines all the command words, and then repeatedly uses beta-reduction until there are no command words left to simplify.
+
 ## Defining a Document
 
 ## Types
 
-There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands `\.B`, `\.I`, `\.N`, `\.F` for bool, int, nat and float respectively, argumented with the string representation of that value.
+There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands `\.S`, `\.B`, `\.I`, `\.N`, `\.F` for string boolean, integer, natural and float respectively, argumented with the string representation of that value. The type for a reference to a command word is `~\.~`. Invoking this command word works a little differently than the other types; basically, `\.~ x \\` results in `\x`.
 
 ## Invoking Commands
 
@@ -107,7 +109,7 @@ This looks like a hastle doesn't it? Well, there are a few useful tricks you can
 Of course, this example is supremely useless because as it shows, the built-in function `\.+` already does the same thing (actually, not quite, sine it can take any number of arguments of types natural, integer, or float and sums them, the heirarchy of resulting values being the same as the order I listed them). Perhaps we can make a greeter like all the other language examples do:
 
     \function greet
-        | name
+        | ~\.S name
         | Hello there, \name . How are you?
     \\
 
@@ -120,3 +122,38 @@ Sometimes you want to reference a command itself rather than invoke it. For exam
 Fortunately Notery doesn't complicate it to the level of pointers, but uses this notation to create a reference: `~\.I`. You can only create references to command words. For the running example with `\.let`ing x be an integer, the solution is:
 
     \.let x | ~\.I \\
+
+Another common use of references you'll come across is repetitions or loops. The built-in command for repeating a command a given number of times is `\.loop`. Which is defined something like this (given some internal structure that can't be described in Notery's semantics):
+
+    \function loop
+        | ~\.N times
+        | ~\.~ command
+        | \command \command ... \command
+          \* repeats '\times' times \\
+    \\
+
+It takes a natural and a command word reference (to just repeat a string, use `\.repeat`). Then is invokes the command word that many times, as observable above. Using this functions looks like this:
+
+    \set message | This is an annoying message! \\
+    \loop \.N 10000 | ~\message \\
+
+Of coures, we could have just done this instead,
+
+    \repeat \.N 10000 | \message \\
+
+so this isn't the most interesting example. Here's a better one:
+
+    \function my_log
+        | message
+        | \.log [!]: \message
+    \\
+
+    \function test_log
+        | \my_log Hello, is anyone there?
+    \\
+
+    \loop \.N 2 | ~\.test_log \\
+
+You may think that currying would be a useful tactic here, and you would be correct, but unfortunately that hasn't been planned for implementation yet.
+
+Note: in `\my_log`'s definition, `message` doesn't have a type annotation, so it is assumed to be a string (`\.S`).
