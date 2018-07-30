@@ -1,0 +1,28 @@
+\.*---------------------./
+ \.  A Simple Article  ./
+  \.------------------./
+\\
+
+\.import Article \\
+
+\Article.make.header
+    | A Simple Article \.* Title  \\
+    | Henry Blanchette \.* Author \\
+    | July 9th, 2018   \.* Date   \\
+\\
+
+\Article.begin.body |
+
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eu risus nunc. Aliquam ultricies enim sit amet dolor consectetur, vitae consectetur magna ullamcorper. Suspendisse placerat felis ex, vitae tincidunt urna accumsan vitae. Sed at odio dolor. Aliquam erat volutpat. Fusce vitae massa dui. Phasellus ultricies dolor et aliquet mollis. Sed a tortor vel dolor feugiat pulvinar. Aliquam ut faucibus urna.
+
+    Fusce ornare eleifend condimentum. Proin est quam, varius in blandit et, hendrerit quis mi. Donec finibus feugiat nisi, in rhoncus nisi congue sed. Praesent erat magna, pretium ultrices magna suscipit, viverra mattis ante. Ut sagittis neque purus, vitae dignissim erat blandit vel. Nam non egestas arcu. Cras tristique, dui nec faucibus laoreet, augue odio tincidunt diam, ac aliquam nibh purus at massa. Quisque dictum eu lorem eu rutrum. Quisque aliquam magna in mi facilisis suscipit. Vivamus sed diam nisl. Proin enim libero, scelerisque eu diam commodo, eleifend fermentum odio. Nam eleifend turpis facilisis lacus tincidunt efficitur. Vivamus tempor ipsum vel felis aliquam pretium. Ut eu ligula in purus hendrerit consequat pulvinar ut diam. Maecenas sagittis quis nunc ut suscipit. Phasellus at nulla vel augue aliquet efficitur.
+
+    Nam sagittis rutrum quam nec molestie. Donec nibh augue, commodo ac dictum at, luctus vitae turpis. Quisque ultrices feugiat nibh, eget tempor velit fringilla ut. Proin magna velit, rhoncus ut sem at, molestie viverra leo. Proin a scelerisque purus. Donec sed viverra metus. Duis ornare, risus ut convallis cursus, nunc dolor cursus sapien, eu condimentum magna dolor non orci. Morbi porttitor mi id tortor posuere mattis. Suspendisse aliquam ex ante. In elit odio, mollis non sodales in, euismod nec nisl. In turpis lectus, tristique vel diam ut, aliquet faucibus ipsum. Mauris convallis erat scelerisque dui convallis, rhoncus varius erat condimentum. Suspendisse potenti. Quisque et elit ultricies, consectetur enim ullamcorper, fermentum velit. Etiam ut ex mauris.
+
+    Nunc ultricies ligula euismod justo tristique pulvinar. Duis laoreet lectus eu purus vehicula, et elementum augue maximus. Suspendisse potenti. Sed egestas, enim ut consequat sodales, sem ipsum malesuada eros, ut auctor massa quam ut justo. Sed imperdiet nisl in justo ultrices convallis non nec ligula. Proin volutpat lorem id cursus varius. Aenean facilisis elit vel arcu facilisis, quis interdum lectus euismod. Ut tincidunt orci vel bibendum accumsan. Duis fermentum ultrices varius. Nullam dignissim eu massa ut elementum. Maecenas at neque in ex vulputate porta. Curabitur vulputate dictum purus. Fusce commodo sed nisi eget eleifend. Curabitur consectetur justo metus, vel sodales mauris ornare a. Proin eu ultricies nisl, a aliquam elit.
+
+    Cras vel tempus nisi. Nunc lorem mauris, lobortis ut leo id, interdum fringilla enim. Praesent maximus sagittis metus vitae gravida. Nulla consequat quam ante, eu aliquam nisl lobortis id. Duis purus sapien, finibus non ullamcorper nec, pretium ac quam. Aenean sodales sapien non leo ultrices, eu rutrum nibh aliquet. Ut tempus tortor ac nisl convallis elementum. Duis at semper tortor, at ultricies erat. Phasellus et sapien eros. Curabitur vel pharetra quam. Curabitur ut erat id massa elementum feugiat sed sed urna.
+
+\\
+
+\Article.make.footer \\

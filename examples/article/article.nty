@@ -1,0 +1,25 @@
+\.*-----------------------./
+ \.  the Article module  ./
+  \.--------------------./
+\\
+
+\.* automatically exports all module definitions \\
+\.module.new Article
+
+    | \.module.new make
+
+        | \.function header
+            | title | author | date
+            | \.draw title  \\
+              \.draw author \\
+              \.draw date   \\
+        \\
+
+        | \.function footer
+            | \.draw \.footerline
+        \\
+
+    | \.module.new begin
+        \.* TODO \\
+    \\
+\\
