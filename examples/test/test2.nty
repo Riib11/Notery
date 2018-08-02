@@ -1,0 +1,13 @@
+\.let | x | ~\.B \\
+\.set | x | \.B True \\ \\
+
+\.function my_log
+    | message
+    | \.log [!]: \message
+\\
+
+\.function test_log
+    | \my_log Hello, is anyone there?
+\\
+
+\.loop \.N 2 | ~\.test_log \\

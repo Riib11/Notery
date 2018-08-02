@@ -1,5 +1,7 @@
-from notery.cmdline.logger import log
-from notery.cmdline.title import print_title
+import notery.parsing.parser as parser
+import notery.parsing.lexer as lexer
+import notery.cmdline.logger as logger
+import notery.cmdline.title as titler
 
 import argparse
 import sys
@@ -20,26 +22,28 @@ def main():
         
     # parse arguments
     args = argparser.parse_args()
-    log( "log" , args )
+    logger.log( "log" , args )
 
     def check_input():
         if not args.input:
-            log( "error" , "please provide an input .nty file" )
+            logger.log( "error" , "please provide an input .nty file" )
             quit()
 
     #
-    # compile to html
+    # compile
     #
-    if "html" == args.mode:
+    if "html" == args.mode or "pdf" == args.mode:
 
         check_input()
+        with open(args.input, "r+") as file:
+            string = "".join([ l for l in file ])
+            lexed = lexer.lex(string)
+            parsed = parser.parse(lexed)
 
-    #
-    # compile to pdf
-    #
-    elif "pdf" == args.mode:
-
-        check_input()
+            # output html
+            if "html" == args.mode: pass
+            # output pdf
+            elif "pdf" == args.mode: pass
 
     #
     # update from github
@@ -47,7 +51,7 @@ def main():
     elif "update" == args.mode:
 
         # TODO
-        log( "msg" , "to update Notery, please run `sh .../Notery/update.sh`" )
+        logger.log( "msg" , "to update Notery, please run `sh .../Notery/update.sh`" )
         # subprocess.call(["sh","~/git/Notery/install.sh"])
 
     #
@@ -55,14 +59,14 @@ def main():
     #
     elif "info" == args.mode:
 
-        print_title()
+        title.print_title()
 
     #
     # invalid mode
     #
     else:
 
-        log( "error" , "'"+args.mode+"' is not a valid mode" )
+        logger.log( "error" , "'"+args.mode+"' is not a valid mode" )
 
 
 
