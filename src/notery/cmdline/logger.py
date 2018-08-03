@@ -10,9 +10,13 @@ def log( tag , msg ):
             , back=PrintStyle.BACK_black
             , end="")
 
-    if   check( "msg" ):   print_tag( "#" , PrintStyle.FONT_green )
-    elif check( "error" ): print_tag( "!" , PrintStyle.FONT_red )
-    elif check( "log" ):   print_tag( ">" , PrintStyle.FONT_cyan )
-    else:                  print_tag( "%" , PrintStyle.FONT_red )
+    if check( "msg" ):
+        print_tag( "#" , PrintStyle.FONT_green )
+    elif check( "error" ):
+        print_tag( "!" , PrintStyle.FONT_red )
+    elif check( "log" ):
+        print_tag( ">" , PrintStyle.FONT_cyan )
+    else:
+        print_tag( "%" , PrintStyle.FONT_red )
 
     print(" "+str(msg))

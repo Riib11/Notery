@@ -1,6 +1,6 @@
 # Notery - The Guide
 
-## Goals
+## Language Goals
 
 Notery's goals are to implement the following into a LaTex-like program:
 
@@ -16,9 +16,9 @@ There are two types of strings you can write in a notery file:
 - Command strings: start with a `\`.
 - Normal strings: start with anything else.
 
-The totality of reserved normal-contex characters are: `\`, `|`, and `~`. So you don't have to worry about a bunch of reserved characters! `\` prefixes command words, `|` seperates command invocation arguments, and `~` creates command word references
+The totality of reserved normal-contex characters are: `\`, `|`, and `~`. So you don't have to worry about a bunch of reserved characters! `\` prefixes command words, `|` seperates function invocation arguments, and `~` creates function references
 
-In the command word context (the name of the command word), the only reserved characters are: `.`,`*`, and, of course, ` `. The `.` character allows access to the children of modules, `*` creates comments. Also, a command word in the form `\.<name>` is interpretted as a function invocation, whereas a command word in the form `\<name>` is interpretted as a constant or variable.
+In the command word context (the name of the command word), the only reserved characters are: `.`,`*`, and, of course, ` `. The `.` character allows access to the children of modules, `\.*` starts a comment block (ended by `\\` of course). Also, a command word in the form `\.<name>` is interpretted as a function invocation, whereas a command word in the form `\<name>` is interpretted as a constant or variable.
 
 Remember that `\n`s and ` `s are ignored by the lexer in terms of text placement, so you'll need to use certain commands to get special seperations if you want them.
 
@@ -28,9 +28,9 @@ Compiling a notery document consists of the following steps:
 
 1. Read in strings in input file.
 2. Compile all command definitions, lazily.
-3. Construct document specifications using axiomatic commands (such as document size and orientation and etc). 
-4. Use beta-reduction rules on command invocations to simplify the document contents to notery structures.
-5. Produce target output type from notery structured document.
+3. Construct document specifications (such as document size and orientation and etc). 
+4. Use beta-reduction rules on function invocations and constants to simplify the document contents to simplest structures.
+5. Translate to output.
 
 In short, the compiler defines all the command words, and then repeatedly uses beta-reduction until there are no command words left to simplify.
 
@@ -38,13 +38,13 @@ In short, the compiler defines all the command words, and then repeatedly uses b
 
 ## Types
 
-There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands `\.S`, `\.B`, `\.I`, `\.N`, `\.F` for string boolean, integer, natural and float respectively, argumented with the string representation of that value. The type for a reference to a command word is `~\.`. Invoking this command word works a little differently than the other types; basically, `\. x \\` results in `\.x`.
+There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the functions `S`, `B`, `I`, `N`, `F` for string boolean, integer, natural and float respectively, argumented with the string representation of that value. Using a reference to the function represents the type it casts to. The type for a reference to a command word is `~\.`. Invoking this command word works a little differently than the other types; specifically, `\. x \\` results in `\.x`.
 
 There are three types of command words: functions, constants, and variables. Functions are always prefixed by `\.`. Constants and variables technically act differently, but they are both prefixed by only `\`, without the `.`. Constants exists in the global context, whereas variables are set by function invocations and exist within the local context of the function.
 
 ## Invoking Functions
 
-A very simple function invocation looks like `\.let | $name | $value \\`. This command allows you to set the value of a constant. The syntax of commands, put simply, is this:
+A very simple function invocation looks like `\.let | \name | \value \\`. This command allows you to set the value of a constant. The syntax of commands, put simply, is this:
 
 - Function name starts with `\.`. Following the function name is the function invocation block.
 - Function arguments are each prefixed by a `|`, (except for the first argument, where the `|` may be omitted if you like the aethstetic).
@@ -67,7 +67,7 @@ which may look hard to read at first, but looks better with some indentations:
 
 super clean! As a side not, syntax highlighting helps a lot.
 
-## Defining new Commands
+## Defining new Command Words
 
 To define new command words, you have a few options:
 
@@ -75,13 +75,13 @@ To define new command words, you have a few options:
 
     \.set \name | \value \\
 
-Assigns `$value` to the value of a constant with the name `$name`. These constants are immutable. If a constant of the name `$name` isn't already defined (by the way of `\.let`), then this command defines it.
+Assigns `\value` to the value of a constant with the name `\name`. These constants are immutable. If a constant of the name `\name` isn't already defined (by the way of `\.let`), then this command defines it.
 
 ##### let
 
     \.let \type \\
 
-Defines a new constant, and indicates that the constant must later be `\set` to a value with the type `$type`.
+Defines a new constant, and indicates that the constant must later be `\set` to a value with the type `\type`.
 
 ##### function
 
@@ -119,39 +119,39 @@ Note that I had to seperate the `.` from the end of `\name`. This is an annoying
 
 ## Referencing Functions
 
-Sometimes you want to reference a command itself rather than invoke it. For example, if you want to `\.let` x be an integer. The command for representing an integer value is `\.I`, but if you did `\.let x | \.I \\` the compiler will be confused because it thinks you are invoking `\.I` in the second argument of `\.let`, but there are no subsequent arguments passed to `\.I`, so you'll get an error pointing that out. What you really want to do is _reference_ `\.I` rather than invoke it. Commonly this is termed as using a __pointer__ that referenced where `\.I` is stored.
+Sometimes you want to reference a function itself rather than invoke it. For example, if you want to `\.let` x be an integer. The function for representing an integer value is `\.I`, but if you did `\.let x | \.I \\` the compiler will be confused because it thinks you are invoking `\.I` in the second argument of `\.let`, but there are no subsequent arguments passed to `\.I`, so you'll get an error pointing that out. What you really want to do is _reference_ `\.I` rather than invoke it. Commonly this is termed as using a __pointer__ that referenced where `\.I` is stored.
 
 Fortunately Notery doesn't complicate it to the level of pointers, but uses this notation to create a reference: `~\.I`. You can only create references to command words. For the running example with `\.let`ing x be an integer, the solution is:
 
     \.let x | ~\.I \\
 
-Another common use of references you'll come across is repetitions or loops. The built-in command for repeating a command a given number of times is `\.loop`. Which is defined something like this (given some internal structure that can't be described in Notery's semantics):
+Another common use of references you'll come across is repetitions or loops. The built-in function for repeating a function a given number of times is `\.loop`. Which is defined something like this (given some internal structure that can't be described in Notery's semantics):
 
-    \function loop
+    \.function loop
         | ~\.N times
-        | ~\.~ command
+        | ~\. command
         | \command \command ... \command
           \* repeats '\times' times \\
     \\
 
 It takes a natural and a command word reference (to just repeat a string, use `\.repeat`). Then is invokes the command word that many times, as observable above. Using this functions looks like this:
+    
+    \.set message | This is an annoying message! \\
+    \.loop \.N 10000 | ~\.message \\
 
-    \set message | This is an annoying message! \\
-    \loop \.N 10000 | ~\message \\
+Note that if a constant is passed where a function is expected, it is cast to a function that takes no arguments. Of course, we could have just done this instead,
 
-Of coures, we could have just done this instead,
-
-    \repeat \.N 10000 | \message \\
+    \.repeat \.N 10000 | \message \\
 
 so this isn't the most interesting example. Here's a better one:
 
-    \function my_log
+    \.function my_log
         | message
         | \.log [!]: \message
     \\
 
-    \function test_log
-        | \my_log Hello, is anyone there?
+    \.function test_log
+        | \.my_log Hello, is anyone there?
     \\
 
     \loop \.N 2 | ~\.test_log \\

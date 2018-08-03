@@ -1,7 +1,7 @@
 import notery.parsing.parser as parser
 import notery.parsing.lexer as lexer
 import notery.cmdline.logger as logger
-import notery.cmdline.title as titler
+import notery.cmdline.titler as titler
 
 import argparse
 import sys
@@ -22,7 +22,7 @@ def main():
         
     # parse arguments
     args = argparser.parse_args()
-    logger.log( "log" , args )
+    # logger.log( "log" , args )
 
     def check_input():
         if not args.input:
@@ -39,6 +39,7 @@ def main():
             string = "".join([ l for l in file ])
             lexed = lexer.lex(string)
             parsed = parser.parse(lexed)
+            # logger.log("log", parsed)
 
             # output html
             if "html" == args.mode: pass
@@ -59,7 +60,7 @@ def main():
     #
     elif "info" == args.mode:
 
-        title.print_title()
+        titler.print_title()
 
     #
     # invalid mode

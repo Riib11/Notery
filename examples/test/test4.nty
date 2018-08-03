@@ -1,0 +1,5 @@
+\.let x | ~\.B \\
+
+\.set x | \.B False \\ \\
+
+\.function f | x | \x \\
