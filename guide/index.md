@@ -18,7 +18,7 @@ There are two types of strings you can write in a notery file:
 
 The totality of reserved normal-contex characters are: `\`, `|`, and `~`. So you don't have to worry about a bunch of reserved characters! `\` prefixes command words, `|` seperates command invocation arguments, and `~` creates command word references
 
-In the command word context (the name of the command word), the only reserved characters are: `.`,`*`, and, of course, ` `. The `.` character allows access to the children of modules, `*` creates comments. Note, however, that all built-in command word start with `\\`, so try not to start yours with that prefix!
+In the command word context (the name of the command word), the only reserved characters are: `.`,`*`, and, of course, ` `. The `.` character allows access to the children of modules, `*` creates comments. Also, a command word in the form `\.<name>` is interpretted as a function invocation, whereas a command word in the form `\<name>` is interpretted as a constant or variable.
 
 Remember that `\n`s and ` `s are ignored by the lexer in terms of text placement, so you'll need to use certain commands to get special seperations if you want them.
 
@@ -38,29 +38,31 @@ In short, the compiler defines all the command words, and then repeatedly uses b
 
 ## Types
 
-There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands `\.S`, `\.B`, `\.I`, `\.N`, `\.F` for string boolean, integer, natural and float respectively, argumented with the string representation of that value. The type for a reference to a command word is `~\.~`. Invoking this command word works a little differently than the other types; basically, `\.~ x \\` results in `\x`.
+There are 5 simple datatypes in Notery: string, bool, int, nat, and float. Text is interpretted as string by default, but to reference a numberic value, use the commands `\.S`, `\.B`, `\.I`, `\.N`, `\.F` for string boolean, integer, natural and float respectively, argumented with the string representation of that value. The type for a reference to a command word is `~\.`. Invoking this command word works a little differently than the other types; basically, `\. x \\` results in `\.x`.
 
-## Invoking Commands
+There are three types of command words: functions, constants, and variables. Functions are always prefixed by `\.`. Constants and variables technically act differently, but they are both prefixed by only `\`, without the `.`. Constants exists in the global context, whereas variables are set by function invocations and exist within the local context of the function.
 
-A very simple command invocation looks like `\.let | $name | $value \\`. This command allows you to set the value of a constant. The syntax of commands, put simply, is this:
+## Invoking Functions
 
-- Command name starts with `\`
-- Command arguments are each prefixed by a `|`
-- Command invocations are ended by ended by a `\\`
+A very simple function invocation looks like `\.let | $name | $value \\`. This command allows you to set the value of a constant. The syntax of commands, put simply, is this:
 
-So, if you want to use a command `\f` that has 2 arguments, do
+- Function name starts with `\.`. Following the function name is the function invocation block.
+- Function arguments are each prefixed by a `|`, (except for the first argument, where the `|` may be omitted if you like the aethstetic).
+- Function invocation blocks are ended by ended by a `\\`
 
-    \f | $1 | $2 \\
+So, if you want to invoke a function `f` that has 2 arguments, write
 
-If you want to use a command inside of a command, do
+    \.f | \1 | \2 \\
 
-    \f | \f $1 | $2 \\ | \f $3 | $4 \\ \\
+If you want to invoke a function inside of another function, do
+
+    \.f | \.f \1 | \2 \\ | \.f \3 | \4 \\ \\
 
 which may look hard to read at first, but looks better with some indentations:
 
-    \f
-        | \f $1 | $2 \\
-        | \f $3 | $4 \\
+    \.f
+        | \.f \1 | \2 \\
+        | \.f \3 | \4 \\
     \\
 
 super clean! As a side not, syntax highlighting helps a lot.
@@ -69,23 +71,23 @@ super clean! As a side not, syntax highlighting helps a lot.
 
 To define new command words, you have a few options:
 
-##### \\.set
+##### set
 
-    \.set $name | $value \\
+    \.set \name | \value \\
 
 Assigns `$value` to the value of a constant with the name `$name`. These constants are immutable. If a constant of the name `$name` isn't already defined (by the way of `\.let`), then this command defines it.
 
-##### \\.let
+##### let
 
-    \.let $type \\
+    \.let \type \\
 
 Defines a new constant, and indicates that the constant must later be `\set` to a value with the type `$type`.
 
-##### \\.function
+##### function
 
-    \.function $name | $1_name | $2_name | ... | $result \\
+    \.function \name | \1 | \2 | ... | \result \\
 
-Defines a new function with the name `$name` that takes arguments `$1_name`, `$2_name`, etc. These argument names serve for being referenced in `$result`. When the function is invoked, it is reduced to `$result`, which may include references to the arguments to the function. References to these names look just like references to any other defined command word. The `\.function` arguments are intrepretted with these rules: the first argument is the name of the function, the last argument is the result of the function, any arguments non-inclusevly between the first and last are argument names.
+Defines a new function with the name `\name` that takes arguments `\1`, `\2`, etc. These argument names serve for being referenced in `\result`. When the function is invoked, it is reduced to `\result`, which may include references to the arguments to the function. References to these names look just like references to any other defined command word. The `\.function` arguments are intrepretted with these rules: the first argument is the name of the function, the last argument is the result of the function, any arguments non-inclusevly between the first and last are argument names.
 
 Note: Recursive function definitions are __NOT__ supported, sorry. Maybe that will be added to the language at some point.
 
@@ -93,7 +95,7 @@ Note: Recursive function definitions are __NOT__ supported, sorry. Maybe that wi
 
 So as you've noticed there are very simple types, only 5, in Notery. You'll mostly be working with strings, but its useful to have the others as well. Sometimes, you might want a functions arguments to have the right types. Conveniently, Notery organizes strings into arrays automatically, so even though a function argument cannot have any spaces in its name, if you do put a type next to it the compiler can easily pick it up. What does this look like? Like this, for example:
 
-    \function my_add
+    \.function my_add
         | ~\.I x
         | ~\.I y
         | \.+ \x \y \\
@@ -101,7 +103,7 @@ So as you've noticed there are very simple types, only 5, in Notery. You'll most
 
 This looks like a hastle doesn't it? Well, there are a few useful tricks you can use to simplify things. For example, multiple strings in a command argument slot will be interpretted each as a new argument name. The seperators enclose type requirements. So, the above could be rewritten like so:
 
-    \function my_add
+    \.function my_add
         | ~\.I x y
         | \.+ \x \y
     \\
@@ -113,9 +115,9 @@ Of course, this example is supremely useless because as it shows, the built-in f
         | Hello there, \name . How are you?
     \\
 
-Note that I had to seperate the `.` from the end of `\name`. Maybe I'll fix that at some point in the future.
+Note that I had to seperate the `.` from the end of `\name`. This is an annoying precaution that you'll have to be mindful of at the moment. I'll fix that at some point in the future, I promise.
 
-## Referencing Commands
+## Referencing Functions
 
 Sometimes you want to reference a command itself rather than invoke it. For example, if you want to `\.let` x be an integer. The command for representing an integer value is `\.I`, but if you did `\.let x | \.I \\` the compiler will be confused because it thinks you are invoking `\.I` in the second argument of `\.let`, but there are no subsequent arguments passed to `\.I`, so you'll get an error pointing that out. What you really want to do is _reference_ `\.I` rather than invoke it. Commonly this is termed as using a __pointer__ that referenced where `\.I` is stored.
 

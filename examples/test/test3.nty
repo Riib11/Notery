@@ -1,0 +1,12 @@
+\.let x
+    | ~\.B
+\\
+
+\.set x
+    | \.B True \\
+\\
+
+\.function my_log
+    | message
+    | \.log [!]: \message
+\\
