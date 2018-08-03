@@ -2,7 +2,7 @@ from notery.utility.strings import *
 import notery.cmdline.logger as logger
 
 #
-# Invocation
+# INVOCATION
 #
 class Invocation:
 
