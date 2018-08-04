@@ -2,9 +2,9 @@ from notery.utility.strings import *
 import notery.cmdline.logger as logger
 
 #
-# INVOCATION
+# FUNCTION functioninvocation
 #
-class Invocation:
+class FunctionInvocation:
 
     def __init__(self, parent=None, name=None):
         self.parent = parent
@@ -33,9 +33,9 @@ class Invocation:
     __repr__ = tostring
 
 #
-# REFERENCE
+# FUNCTION REFERENCE
 #
-class Reference:
+class FunctionReference:
 
     def __init__(self, name):
         self.name = name
@@ -46,9 +46,9 @@ class Reference:
     __repr__ = tostring
 
 #
-# CONSTANT
+# CONSTANT REFERENCE
 #
-class Constant:
+class ConstantReference:
 
     def __init__(self, name):
         self.name = name
@@ -63,12 +63,10 @@ def lex(string):
     string = rreplace( string , "\n" , " " )
     string = rreplace( string , "  ", " " )
     words = string.split(" ")
-    # print(words)
 
     in_comment = False
-    invocation = Invocation(name="__main")
+    functioninvocation = FunctionInvocation(name="__main")
     for w in words:
-        # print(invocation)
 
         if len(w)==0: continue
 
@@ -80,29 +78,29 @@ def lex(string):
         elif w.startswith("\\.*"):
             in_comment = True
 
-        # end current invocation
+        # end current functioninvocation
         elif w.startswith("\\\\"):
-            invocation = invocation.parent
+            functioninvocation = functioninvocation.parent
         
-        # start new invocation as child
+        # start new functioninvocation as child
         elif w.startswith("\\."):
-            invocation = Invocation(invocation, w[2:])
+            functioninvocation = FunctionInvocation(functioninvocation, w[2:])
 
         # reference to command word
         elif w.startswith("~\\"):
-            refer = Reference(w[2:])
-            invocation.add(refer)
+            reference = FunctionReference(w[2:])
+            functioninvocation.add(reference)
             
         # start new arg
         elif w.startswith("|"):
-            invocation.start_arg()
+            functioninvocation.start_arg()
 
         elif w.startswith("\\"):
-            const = Constant(w[1:])
-            invocation.add(const)
+            const = ConstantReference(w[1:])
+            functioninvocation.add(const)
 
         # add argument text
         else:
-            invocation.add(w)
+            functioninvocation.add(w)
 
-    return invocation
+    return functioninvocation

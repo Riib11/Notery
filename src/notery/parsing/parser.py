@@ -10,6 +10,7 @@ class Invocation:
     def __init__(self, name, args):
         self.name = name
         self.args = args
+        self.context = Context()
 
     def tostring(self):
         s = "$(" + self.name + " ("
@@ -242,6 +243,7 @@ def parse(lexed):
             return cons
         
         # define a Function
+        # opens a new context
         elif builtins["function"] == invo.name:
             if len(invo.args) < 2:
                 logger.log("error", "to define a function you must at least provide a name and a result.")
@@ -278,11 +280,11 @@ def parse(lexed):
 
 
     def parse_helper(x):
-        if isinstance(x, lexer.Invocation):
+        if isinstance(x, lexer.FunctionInvocation):
             return parse_invocation(x)
-        elif isinstance(x, lexer.Constant):
+        elif isinstance(x, lexer.ConstantReference):
             return parse_constantreference(x)
-        elif isinstance(x, lexer.Reference):
+        elif isinstance(x, lexer.FunctionReference):
             return parse_functionreference(x)
         elif isinstance(x, list):
             return parse_phrase(x)
@@ -295,4 +297,4 @@ def parse(lexed):
         logger.log("log",x)
         parse_helper(x)
 
-    print(context)
+    # print(context)

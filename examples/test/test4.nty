@@ -1,5 +1,4 @@
-\.let x | ~\.B \\
-
+\.let x y z | ~\.B \\
 \.set x | \.B False \\ \\
 
 \.function f | x | \x \\
